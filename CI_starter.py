@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+#
+# Kamil Sladowski
+# Projekt zaliczeniowy z pythona
+#
 """
 This project is a simulator of Continuous Integration process.
 Script trigger (faked) tests suite, when detects new changes on github repository.
@@ -21,7 +25,6 @@ Requirements:
 
 """
 
-import os
 import argparse
 from subprocess import Popen, PIPE, STDOUT, DEVNULL
 from github import *
@@ -31,7 +34,7 @@ from tests_suite import *
 USERNAME = "Project-temporary-user"
 REPOSITORY_NAME = 'controlled_repository'
 TESTS_TO_LAUNCH = [1, 4, 6, 7, 10, 22, 32, 33, 51]
-SPAMMER_FILE = os.path.join(REPOSITORY_NAME, "commits_spammer.sh")
+SPAMMER_FILE = "commits_spammer.sh"
 TIME_DELAY = 5
 
 
@@ -51,7 +54,7 @@ def get_arguments():
 
 def run_commits_generator(github_token, commit_number):
     spammer = Popen(
-        SPAMMER_FILE + " " + github_token + " " + USERNAME + " " + REPOSITORY_NAME + " " + commit_number,
+        "./" + SPAMMER_FILE + " " + github_token + " " + USERNAME + " " + REPOSITORY_NAME + " " + commit_number,
         shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
     print("INFO: Commits generator started pushing new changes to github")
     return spammer

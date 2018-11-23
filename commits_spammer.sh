@@ -16,15 +16,15 @@ echo "$username"
 echo "$controlled_repository"
 current_dir=$(dirname "$0")
 
-if ! [ -d ${controlled_repository} ]; then
-    mkdir ${controlled_repository}
-    git clone "https://github.com/$username/$controlled_repository.git" ${controlled_repository}
-    cd ${controlled_repository}
-    git remote set-url origin "https://$username:${token}@github.com/$username/$controlled_repository.git"
-    cd -
-fi
+#if ! [ -d ${controlled_repository} ]; then
+#    mkdir ${controlled_repository}
+#    git clone "https://github.com/$username/$controlled_repository.git" ${controlled_repository}
+#    cd ${controlled_repository}
+#    cd -
+#fi
+git remote set-url origin "https://$username:${token}@github.com/$username/$controlled_repository.git"
 
-cd "$controlled_repository"
+#cd "$controlled_repository"
 sleep 1
 for i in `seq $commit_number`; do
     echo `date '+%Y%m%d%H%M%S'` > README.md

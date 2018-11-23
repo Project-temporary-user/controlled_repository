@@ -77,7 +77,6 @@ def get_report_details(report_files: list) -> TestResult:
             for line in f:
                 line = line.split()
                 if line[0] != REPORT_HEADER:
-                    print(TestResult(*line))
                     report_obj.append(TestResult(*line))
     return report_obj
 
