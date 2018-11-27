@@ -48,6 +48,12 @@ def get_arguments():
     parser.add_argument('-c', '--commit_number',
                         help='How many commits push to repository. The more they are, the longer the program will be working',
                         type=int, default=2)
+    parser.add_argument('-s', '--start_http',
+                        help='Start www server to render results',
+                        action='store_true')
+    parser.add_argument('-m', '--monitor',
+                        help='Control changes on github and launch tests',
+                        action='store_true')
     parser.parse_args()
     return parser.parse_args()
 
@@ -64,12 +70,16 @@ if __name__ == '__main__':
     args = get_arguments()
     github_token = args.token
     commit_number = args.commit_number
-    time_to_wait_for_changes = commit_number*TIME_DELAY + 5
+    start_http = args.start_http
+    is_monitoring = args.monitor
 
-    spammer = run_commits_generator(github_token, str(commit_number))
-    github_session = create_github_session(github_token)
-    monitor_changes(github_token, github_session, time_to_wait_for_changes,
-                    USERNAME, REPOSITORY_NAME, TESTS_TO_LAUNCH, TIME_DELAY)
+    if is_monitoring:
+        time_to_wait_for_changes = commit_number*TIME_DELAY + 5
+        spammer = run_commits_generator(github_token, str(commit_number))
+        github_session = create_github_session(github_token)
+        monitor_changes(github_token, github_session, time_to_wait_for_changes,
+                        USERNAME, REPOSITORY_NAME, TESTS_TO_LAUNCH, TIME_DELAY)
 
-    spammer.terminate()
-    generate_report()
+        spammer.terminate()
+    if start_http:
+        generate_report()

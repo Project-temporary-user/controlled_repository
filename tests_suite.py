@@ -30,14 +30,13 @@ CURR_DIR = os.path.dirname(os.path.realpath(__file__))
 
 class TestResult:
 
-    def __init__(self, id, is_passed, time_spend, log_file_dir='/'):
+    def __init__(self, id, is_passed, time_spend):
         self.id = str(id)
         self.is_passed = is_passed
         self.time_spend = str(time_spend)
-        self.log_file_dir = log_file_dir
 
     def __str__(self):
-        return self.id + '\t' + self.is_passed + '\t' + self.time_spend + '\t' + self.log_file_dir
+        return self.id + '\t' + self.is_passed + '\t' + self.time_spend
 
     def __repr__(self):
         return self.__str__()
@@ -65,11 +64,6 @@ def create_suite_tests_dir(dirname, date):
     return create_dir(dirname, name)
 
 
-def create_single_test_dir(dirname, id, name):
-    name = 'test_' + id + '_started_at_' + name
-    return create_dir(dirname, name)
-
-
 def create_single_test_log_file(dirname, date):
     new_file_name = os.path.join(dirname, str('test_' + date + '.txt'))
     with open(new_file_name, 'w') as f:
@@ -85,13 +79,12 @@ def update_report_file(file_name, test_result):
 
 def launch_single_test(id):
     print("Info: Started test: " + id)
-    dir = '//'
     time_spend = 0
     is_passed = choice([True, False])
     if is_passed:
         time_spend = randint(1, 1000)
     print("Info: Test " + id + " - result: " + str(is_passed))
-    return TestResult(id, str(is_passed), time_spend, dir)
+    return TestResult(id, str(is_passed), time_spend)
 
 
 def launch_tests(tests_to_launch):
@@ -103,9 +96,7 @@ def launch_tests(tests_to_launch):
     file_name = create_single_test_log_file(suite_test_dir, current_date)
     for id in tests_to_launch:
         id = str(id)
-        single_test_dir = create_single_test_dir(suite_test_dir, id, current_date)
         test_result = launch_single_test(id)
-        test_result.log_file_dir = single_test_dir
         update_report_file(file_name, test_result)
 
 
@@ -127,4 +118,4 @@ def monitor_changes(github_token, github_session, time_to_wait_for_changes,
             print("INFO: No changes")
             time.sleep(time_delay)
             timer += time_delay
-    print("INFO: End of waiting for new changes on github")
+    print("INFO: Finished monitoring the github repository")
