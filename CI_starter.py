@@ -14,6 +14,10 @@ You will need internet browser to open .html summary.
 (The tests are faked and results generated randomly - The goal of project was to implement only flow - how to detect
 changes, collect final report and present in a readable way).
 
+Program contains additional bash script, commits_spammer.sh, to generate fictional changes on repository.
+It is running as other process, when main process monitor changes. You can use this, or generate changes on your own.
+
+
 Requirements:
 - Python3
 - Flask
@@ -22,6 +26,9 @@ Requirements:
     Installation:
     apt-get install python3-pip
     pip3 install --upgrade -r requirements.txt
+
+
+usage: CI_starter.py [-h] -t TOKEN [-c COMMIT_NUMBER] [-s] [-m]
 
 """
 
@@ -60,7 +67,7 @@ def get_arguments():
 
 def run_commits_generator(github_token, commit_number):
     spammer = Popen(
-        "./" + SPAMMER_FILE + " " + github_token + " " + USERNAME + " " + REPOSITORY_NAME + " " + commit_number,
+        "./{} {} {} {} {}".format(SPAMMER_FILE, github_token, USERNAME, REPOSITORY_NAME, commit_number),
         shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
     print("INFO: Commits generator started pushing new changes to github")
     return spammer
