@@ -37,10 +37,11 @@ usage: CI_starter.py [-h] -t TOKEN [-c COMMIT_NUMBER] [-s] [-m]
 """
 
 import argparse
-from subprocess import Popen, PIPE, STDOUT, DEVNULL
+import os
 from github import *
 from report import generate_report
 from tests_suite import *
+from generator import *
 
 USERNAME = "Project-temporary-user"
 REPOSITORY_NAME = 'controlled_repository'
@@ -69,14 +70,6 @@ def get_arguments():
     return parser.parse_args()
 
 
-def run_commits_generator(github_token, commit_number):
-    spammer = Popen(
-        "./{} {} {} {} {}".format(SPAMMER_FILE, github_token, USERNAME, REPOSITORY_NAME, commit_number),
-        shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
-    print("INFO: Commits generator started pushing new changes to github")
-    return spammer
-
-
 if __name__ == '__main__':
     args = get_arguments()
     github_token = args.token
@@ -86,7 +79,7 @@ if __name__ == '__main__':
 
     if is_monitoring:
         time_to_wait_for_changes = commit_number*TIME_DELAY + 5
-        spammer = run_commits_generator(github_token, str(commit_number))
+        spammer = run_commits_generator(SPAMMER_FILE, github_token, USERNAME, REPOSITORY_NAME, commit_number)
         github_session = create_github_session(github_token)
         monitor_changes(github_token, github_session, time_to_wait_for_changes,
                         USERNAME, REPOSITORY_NAME, TESTS_TO_LAUNCH, TIME_DELAY)
