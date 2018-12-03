@@ -112,17 +112,20 @@ def process_reports_data(report_details: list) -> list:
 
 
 def generate_report():
-    print("INFO: Generating report for tests results. Open following URL to get report:")
-    app = Flask(__name__)
-    # app.debug =True
+    report_files = collect_report_files()
+ 
+    if len(report_files) > 0:
+        print("INFO: Generating report for tests results. Open following URL to get report:")
+        app = Flask(__name__)
 
-    @app.route('/')
-    def index():
-        report_files = collect_report_files()
-        report_details = sorted(get_report_details(report_files), key=lambda obj: int(obj.id))
-        processed_rep = process_reports_data(report_details)
-        return render_template('report.html', tests=processed_rep, passed_tests_num=passed_tests_num(processed_rep))
+        @app.route('/')
+        def index():
+            report_files = collect_report_files()
+            report_details = sorted(get_report_details(report_files), key=lambda obj: int(obj.id))
+            processed_rep = process_reports_data(report_details)
+            return render_template('report.html', tests=processed_rep, passed_tests_num=passed_tests_num(processed_rep))
 
-    app.run(host=HOST, port=PORT)
-
+        app.run(host=HOST, port=PORT)
+    else:
+        print("ERROR: Unable to generate report. No data from reports")
 
