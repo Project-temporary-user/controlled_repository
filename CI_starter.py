@@ -5,11 +5,13 @@
 #
 """
 This project is a simulator of Continuous Integration process.
-Script trigger (faked) tests suite, when detects new changes on github repository.
-Results are saved on disc, to .txt files.
-After tests, results are being collected from this and previous 5 last tests suites.
-Statistics from collected data are processed and located to html report.
-You will need internet browser to open .html summary.
+You can run one of two project stages, or both:
+1 - [-m] Script trigger (faked) tests suite, when detects new changes on github repository.
+         Results are saved on disc, to .txt files.
+
+2 - [-s] Results are being collected from this and previous 5 last tests suites.
+         Statistics from collected data are processed and located to html report.
+         You will need internet browser to open .html summary.
 
 (The tests are faked and results generated randomly - The goal of project was to implement only flow - how to detect
 changes, collect final report and present in a readable way).
@@ -23,8 +25,10 @@ Requirements:
 - Flask
 - requests
 
-    Installation:
+    Install pip3:
     apt-get install python3-pip
+    
+    Install required python3 libraries:
     pip3 install --upgrade -r requirements.txt
 
 
